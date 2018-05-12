@@ -1,4 +1,4 @@
-function [pop,finalsolution,Bias,Bias_sub,Biastol] = test(Part_sort,generation,part_distribute)
+function pop= test(Part_sort,generation,part_distribute)
 % Part_sort表示零件种类 range正态分布模拟偏差场的范围 generation 种群迭代次数
 % part_distribute是按照装配顺序的零件种类分布，如[1,3,2,2,3,1,4,4]表示二级氧箱 1-箱底 2-筒段 3-Y型环 4-短壳
 tic
