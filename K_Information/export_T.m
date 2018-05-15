@@ -1,4 +1,4 @@
-function [Tran1,Tran2]=export_T(filename1,filename2,filename12,K1,K2,K12)
+function [Tran1,Tran2,P1B,P2B,P12B]=export_T(filename1,filename2,filename12,K1,K2,K12)
 m=importdata(filename1);
 P1B=m(:,2:4);
 m=importdata(filename2);
