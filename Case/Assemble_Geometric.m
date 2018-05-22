@@ -31,9 +31,9 @@ PX_tol=pxd(Node_Biastol(305:1:320,:),Node_Biastol(end-15:1:end,:));%装配体上下端
 Profile=zeros(PartNum,1);%零件轮廓度
 for i=[3,4,7,8]
     profile={Node_Bias{i}(1:16:end,:),Node_Bias{i}(5:16:end,:),Node_Bias{i}(9:16:end,:),Node_Bias{i}(13:16:end,:)};%两条母线直线
-    Profile(i)=zxd(profile);
+    Profile(i)=zxd(profile{1});
 end
 profile_tol={Node_Biastol(65:16:225,:),Node_Biastol(69:16:229,:),Node_Biastol(73:16:233,:)};%装配体轮廓度(选取两条母线）
-Profile_tol=zxd(profile_tol);
+Profile_tol=zxd(profile_tol{1});
 end
 

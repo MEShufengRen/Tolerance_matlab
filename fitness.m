@@ -39,38 +39,31 @@ for i = 1:size(x,1)
     end
     Node_Biastol=Node_Bias_sub{end}; %总装配体带偏差场的节点信息
     %计算各零件\子装配体\装配体的平面度\平行度\轮廓度
-   [R,UR_tol,DR_tol,PM,PU_tol,PD_tol,PX,PX_tol,Profile,Profile_tol] = Xiangdi_Geometric(Node_Bias,Node_Biastol,PartNum);
+   [R,UR_tol,DR_tol,PM,PU_tol,PD_tol,PX,PX_tol,Profile,Profile_tol] =Assemble_Geometric(Node_Bias,Node_Biastol,PartNum);
     % 计算此次偏差场下的适应度函数,作为评价指标,fit为适应度
     a=1.6;   %加工成本系数  %     a1=1.6;a2=0.3;a3=2.0;a4=1.0;   %加工成本系数
     b=1.2;   %修配成本系数  %     b1=1.2;b2=0.2;b3=1.6;b4=0.5;   %修配成本系数
     c=1.2;   %质量损失系数  %     c1=1.2;c2=0.2;c3=1.6;c4=0.5;   %质量损失系数
-%    if PU_tol<=4.5 && PD_tol<=4.5 && PX_tol<=4.5 && UR_tol<=4.5 && DR_tol<=4.5 && Profile_tol<=4.5
-%      if         (Index(1)-PU_tol)>=0 && (Index(1)-PU_tol)<=1 ...
-%               &&(Index(2)-PD_tol)>=0 && (Index(2)-PD_tol)<=1 ...
-%               &&(Index(3)-PX_tol)>=0 && (Index(3)-PX_tol)<=1 ...
-%               &&(Index(4)-UR_tol)>=0 && (Index(4)-UR_tol)<=1 ...
-%               &&(Index(5)-DR_tol)>=0 && (Index(5)-DR_tol)<=1 ...
-%               &&(Index(6)-Profile_tol)>=0 && (Index(6)-Profile_tol)<=1 %装配体是否满足要求,装配体输入要求？（选点输入计算是否满足要求）
-     if         (Index(1)-PU_tol)>=0  ...
-              &&(Index(2)-PD_tol)>=0 ...
-              &&(Index(3)-PX_tol)>=0 ...
-              &&(Index(4)-UR_tol)>=0  ...
-              &&(Index(5)-DR_tol)>=0 ...
-              &&(Index(6)-Profile_tol)>=0  %装配体是否满足要求,装配体输入要求？（选点输入计算是否满足要求）
+    if      (Index(1)-PU_tol)>=0 && (Index(2)-PD_tol)>=0 && (Index(3)-PX_tol)>=0 ...
+          &&(Index(4)-UR_tol)>=0 && (Index(5)-DR_tol)>=0 && (Index(6)-Profile_tol)>=0  %装配体是否满足要求,装配体输入要求？（选点输入计算是否满足要求）
         xp=zeros(PartNum,1);       %初始化各零件修配量
         eval_PM=0;                 %初始化适应度函数三部分（加工成本、修配成本、质量损失）
-        eval_xp=0;
-        eval_profile=0;
-        for k=1:PartNum
-            if Profile(k)>=0.5     %评价零件的修配量
+        eval_xp=0;                 %修配成本
+        for k=1:PartNum            %评价零件的修配成本（母线直线度与圆度）
+            if Profile(k)>=1     
                 xp(k)=0;
             else
-                xp(k)=0.5-Profile(k); 
+                xp(k)=1-Profile(k); 
             end
-            eval_PM=a/PM(k)+eval_PM;
-            eval_xp=b*sqrt(xp(k))+eval_xp;
-            eval_profile=c/4*sqrt(Profile(k))+eval_profile;
+            if R(k)>=1
+                xp(k)=xp(k)+0;
+            else
+                xp(k)=xp(k)+1-R(k);
+            end
+            eval_PM=a/(PM(k)+PX(k))+eval_PM;      %加工成本总和
+            eval_xp=b*sqrt(xp(k))+eval_xp;%修配成本总和
         end
+        eval_profile=c*(sum(Index)-PU_tol-PD_tol-PX_tol-UR_tol-DR_tol-Profile_tol);%装配体质量损失
         fit(i)=eval_PM+eval_xp+eval_profile;
     else
         fit(i)=20 ;

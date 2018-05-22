@@ -35,7 +35,7 @@ for i=1:1000
     end
     Node_Biastol=Node_Bias_sub{end}; %总装配体带偏差场的节点信息
     %计算各零件\子装配体\装配体的平面度\平行度\轮廓度
-    [R(:,i),UR_tol(i),DR_tol(i),PM(:,i),PU_tol(i),PD_tol(i),PX(:,i),PX_tol(i),Profile(:,i),Profile_tol(i)] = Xiangdi_Geometric(Node_Bias,Node_Biastol,PartNum);
+    [R(:,i),UR_tol(i),DR_tol(i),PM(:,i),PU_tol(i),PD_tol(i),PX(:,i),PX_tol(i),Profile(:,i),Profile_tol(i)] = Assemble_Geometric(Node_Bias,Node_Biastol,PartNum);
 end
 %零件几何指标（顺序按照装配顺序）
 PM_qualify=mean(PM,2);%按行平均，每一行代表一个零件在1000次模拟中的几何指标

@@ -1,2 +1,3 @@
 计算了4个壁板装配一个筒段的容差分配
 更换其他case，制作新的test和Geometry文件，更新fitness中的指标要求，并且更新fitness和FinalResult中对Geometry文件的调用
+修改了几何精度指标计算
